@@ -134,4 +134,11 @@ contract Mileage is Ownable {
         }
         return type(uint256).max; // Return a large number if not found
     }
+
+    // Function to get all trip information for a user
+    function getAllTripsForUser(
+        address user
+    ) external view returns (TripInformation[] memory) {
+        return userTrips[user];
+    }
 }

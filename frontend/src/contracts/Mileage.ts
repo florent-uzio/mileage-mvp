@@ -23,12 +23,44 @@ import type {
   TypedContractMethod,
 } from "./common";
 
+export declare namespace Mileage {
+  export type TripInformationStruct = {
+    tripId: BigNumberish;
+    startLocation: string;
+    endLocation: string;
+    startTime: BigNumberish;
+    endTime: BigNumberish;
+    totalDistance: BigNumberish;
+    travelDuration: string;
+  };
+
+  export type TripInformationStructOutput = [
+    tripId: bigint,
+    startLocation: string,
+    endLocation: string,
+    startTime: bigint,
+    endTime: bigint,
+    totalDistance: bigint,
+    travelDuration: string
+  ] & {
+    tripId: bigint;
+    startLocation: string;
+    endLocation: string;
+    startTime: bigint;
+    endTime: bigint;
+    totalDistance: bigint;
+    travelDuration: string;
+  };
+}
+
 export interface MileageInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "allocateTrip"
       | "deleteAllTrips"
       | "deleteTrip"
+      | "getAllTripsForUser"
+      | "getTripsForUser"
       | "owner"
       | "renounceOwnership"
       | "transferOwnership"
@@ -42,6 +74,7 @@ export interface MileageInterface extends Interface {
       | "TripAllocated"
       | "TripDeleted"
       | "TripUpdated"
+      | "TripsRetrieved"
   ): EventFragment;
 
   encodeFunctionData(
@@ -63,6 +96,14 @@ export interface MileageInterface extends Interface {
   encodeFunctionData(
     functionFragment: "deleteTrip",
     values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getAllTripsForUser",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTripsForUser",
+    values: [AddressLike]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -91,6 +132,14 @@ export interface MileageInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deleteTrip", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getAllTripsForUser",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTripsForUser",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -180,6 +229,19 @@ export namespace TripUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
+export namespace TripsRetrievedEvent {
+  export type InputTuple = [user: AddressLike, tripIds: BigNumberish[]];
+  export type OutputTuple = [user: string, tripIds: bigint[]];
+  export interface OutputObject {
+    user: string;
+    tripIds: bigint[];
+  }
+  export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
+  export type Filter = TypedDeferredTopicFilter<Event>;
+  export type Log = TypedEventLog<Event>;
+  export type LogDescription = TypedLogDescription<Event>;
+}
+
 export interface Mileage extends BaseContract {
   connect(runner?: ContractRunner | null): Mileage;
   waitForDeployment(): Promise<this>;
@@ -246,6 +308,18 @@ export interface Mileage extends BaseContract {
   deleteTrip: TypedContractMethod<
     [user: AddressLike, tripId: BigNumberish],
     [void],
+    "nonpayable"
+  >;
+
+  getAllTripsForUser: TypedContractMethod<
+    [user: AddressLike],
+    [Mileage.TripInformationStructOutput[]],
+    "view"
+  >;
+
+  getTripsForUser: TypedContractMethod<
+    [user: AddressLike],
+    [bigint[]],
     "nonpayable"
   >;
 
@@ -316,6 +390,16 @@ export interface Mileage extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "getAllTripsForUser"
+  ): TypedContractMethod<
+    [user: AddressLike],
+    [Mileage.TripInformationStructOutput[]],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "getTripsForUser"
+  ): TypedContractMethod<[user: AddressLike], [bigint[]], "nonpayable">;
+  getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
@@ -382,6 +466,13 @@ export interface Mileage extends BaseContract {
     TripUpdatedEvent.OutputTuple,
     TripUpdatedEvent.OutputObject
   >;
+  getEvent(
+    key: "TripsRetrieved"
+  ): TypedContractEvent<
+    TripsRetrievedEvent.InputTuple,
+    TripsRetrievedEvent.OutputTuple,
+    TripsRetrievedEvent.OutputObject
+  >;
 
   filters: {
     "OwnershipTransferred(address,address)": TypedContractEvent<
@@ -426,6 +517,17 @@ export interface Mileage extends BaseContract {
       TripUpdatedEvent.InputTuple,
       TripUpdatedEvent.OutputTuple,
       TripUpdatedEvent.OutputObject
+    >;
+
+    "TripsRetrieved(address,uint256[])": TypedContractEvent<
+      TripsRetrievedEvent.InputTuple,
+      TripsRetrievedEvent.OutputTuple,
+      TripsRetrievedEvent.OutputObject
+    >;
+    TripsRetrieved: TypedContractEvent<
+      TripsRetrievedEvent.InputTuple,
+      TripsRetrievedEvent.OutputTuple,
+      TripsRetrievedEvent.OutputObject
     >;
   };
 }

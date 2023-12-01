@@ -1,7 +1,6 @@
 import { getDefaultWallets } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
 import { Chain, configureChains, createConfig } from "wagmi"
-import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 import { publicProvider } from "wagmi/providers/public"
 
 const xrplEvmRpc = "https://rpc-evm-sidechain.xrpl.org"
@@ -30,11 +29,11 @@ const evmSidechain: Chain = {
 export const { chains, publicClient } = configureChains(
   [evmSidechain],
   [
-    jsonRpcProvider({
-      rpc: () => ({
-        http: xrplEvmRpc,
-      }),
-    }),
+    // jsonRpcProvider({
+    //   rpc: () => ({
+    //     http: xrplEvmRpc,
+    //   }),
+    // }),
     publicProvider(),
   ],
 )

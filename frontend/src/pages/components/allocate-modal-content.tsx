@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useContractWrite } from "wagmi"
+import { Mileage__factory } from "../../contracts"
 import { contractAddress } from "../../shared/constants"
-import { Mileage__factory } from "../../typechain-types"
 
 type AllocateModalContentProps = {
   onClose: () => void
