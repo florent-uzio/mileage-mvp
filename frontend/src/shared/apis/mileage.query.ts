@@ -1,21 +1,22 @@
 import { useContractRead } from "wagmi"
 import { Mileage__factory } from "../../contracts"
-import { contractAddress } from "../constants"
+import contractDetails from "../../contracts/contract-address.json"
+import { EthereumAddressFormat } from "../models"
 
 export const useOwner = () => {
   return useContractRead({
     abi: Mileage__factory.abi,
-    address: contractAddress,
+    address: contractDetails.address as EthereumAddressFormat,
     functionName: "owner",
   })
 }
 
-export const useUserTrips = (userAddress: string) => {
+export const useUserTrips = (userAddress: EthereumAddressFormat) => {
+  console.log({ userAddress })
   return useContractRead({
     abi: Mileage__factory.abi,
-    address: contractAddress,
-    functionName: "userTrips",
+    address: contractDetails.address as EthereumAddressFormat,
+    functionName: "getAllTripsForUser",
+    args: [userAddress],
   })
-
-  // const userTrips = data.
 }

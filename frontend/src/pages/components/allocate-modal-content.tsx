@@ -18,7 +18,8 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useContractWrite } from "wagmi"
 import { Mileage__factory } from "../../contracts"
-import { contractAddress } from "../../shared/constants"
+import contractDetails from "../../contracts/contract-address.json"
+import { EthereumAddressFormat } from "../../shared/models"
 
 type AllocateModalContentProps = {
   onClose: () => void
@@ -38,7 +39,7 @@ export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => 
   const { register, handleSubmit } = useForm<AllocateForm>()
 
   const { write: allocateTrip } = useContractWrite({
-    address: contractAddress,
+    address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     functionName: "allocateTrip",
   })
@@ -55,6 +56,7 @@ export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => 
     allocateTrip({
       args: [user, startLocation, endLocation, startTime, endTime, totalDistance, travelDuration],
     })
+    onClose()
   }
 
   return (
