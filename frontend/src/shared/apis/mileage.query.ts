@@ -12,7 +12,6 @@ export const useOwner = () => {
 }
 
 export const useUserTrips = (userAddress: EthereumAddressFormat) => {
-  console.log({ userAddress })
   return useContractRead({
     abi: Mileage__factory.abi,
     address: contractDetails.address as EthereumAddressFormat,

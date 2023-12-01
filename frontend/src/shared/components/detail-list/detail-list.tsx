@@ -9,9 +9,11 @@ type DetaiListComponentType = FC<DetailListProps> & {
 }
 
 const StyledDl = chakra("dl", {
-  m: 0,
-  "dd + dt": {
-    mt: 3,
+  baseStyle: {
+    m: 0,
+    "dd + dt": {
+      mt: 3,
+    },
   },
 })
 

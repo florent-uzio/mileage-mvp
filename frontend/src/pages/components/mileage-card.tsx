@@ -23,7 +23,7 @@ export const MileageCard = ({
   return (
     <Card>
       <CardHeader>
-        <Heading size="md">{`Mileage Report ${tripId}}`}</Heading>
+        <Heading size="md">{`Mileage Report ID: ${tripId}`}</Heading>
       </CardHeader>
       <CardBody>
         <DetailList>

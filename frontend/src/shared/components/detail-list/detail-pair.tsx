@@ -8,7 +8,7 @@ type DetailPairProps = {
 
 export const DetailPair = ({ label, textSize = "base", value }: DetailPairProps) => (
   <>
-    <Text as="dt" size="xs" css={{ color: "$text200" }}>
+    <Text as="dt" size="xs" css={{ color: "gray" }}>
       {label}
     </Text>
     <Text as="dd" size={textSize} css={{ m: 0 }}>
