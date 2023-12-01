@@ -1,15 +1,18 @@
 import { getDefaultWallets } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
 import { Chain, configureChains, createConfig } from "wagmi"
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc"
 import { publicProvider } from "wagmi/providers/public"
+
+const xrplEvmRpc = "https://rpc-evm-sidechain.xrpl.org"
 
 const evmSidechain: Chain = {
   id: 1440002,
   name: "EVM Sidechain",
   network: "evm-sidechain",
   rpcUrls: {
-    default: { http: ["https://rpc-evm-sidechain.xrpl.org"] },
-    public: { http: ["https://rpc-evm-sidechain.xrpl.org"] },
+    default: { http: [xrplEvmRpc] },
+    public: { http: [xrplEvmRpc] },
   },
   nativeCurrency: {
     decimals: 18,
@@ -24,7 +27,17 @@ const evmSidechain: Chain = {
   testnet: true,
 }
 
-export const { chains, publicClient } = configureChains([evmSidechain], [publicProvider()])
+export const { chains, publicClient } = configureChains(
+  [evmSidechain],
+  [
+    jsonRpcProvider({
+      rpc: () => ({
+        http: xrplEvmRpc,
+      }),
+    }),
+    publicProvider(),
+  ],
+)
 
 const { connectors } = getDefaultWallets({
   appName: "Mileage App",
