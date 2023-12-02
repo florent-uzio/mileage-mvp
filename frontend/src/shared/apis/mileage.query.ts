@@ -25,7 +25,18 @@ export const useTripAllocatedEvent = (action: any) => {
     address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     eventName: "TripAllocated",
-    listener(log) {
+    listener() {
+      action()
+    },
+  })
+}
+
+export const useTripDeletedEvent = (action: any) => {
+  return useContractEvent({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    eventName: "TripDeleted",
+    listener() {
       action()
     },
   })

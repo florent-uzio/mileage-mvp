@@ -1,15 +1,31 @@
-import { Button, Modal, ModalOverlay, SimpleGrid, useDisclosure } from "@chakra-ui/react"
+import { Button, Modal, ModalOverlay, SimpleGrid, useDisclosure, useToast } from "@chakra-ui/react"
 import { useAccount } from "wagmi"
-import { useOwner, useTripAllocatedEvent, useUserTrips } from "../shared/apis"
+import { useOwner, useTripAllocatedEvent, useTripDeletedEvent, useUserTrips } from "../shared/apis"
 import { Page } from "../shared/components"
 import { AllocateModalContent } from "./components/allocate-modal-content"
 import { MileageCard } from "./components/mileage-card"
 
 export const HomePage = () => {
   const { address = "0x" } = useAccount()
+  const toast = useToast()
   const { data: owner } = useOwner()
   const { data: userTrips = [], refetch } = useUserTrips(address)
-  useTripAllocatedEvent(refetch)
+  useTripAllocatedEvent(() => {
+    refetch()
+    toast({
+      status: "success",
+      isClosable: true,
+      title: "Trip successfully allocated",
+    })
+  })
+  useTripDeletedEvent(() => {
+    refetch()
+    toast({
+      status: "success",
+      isClosable: true,
+      title: "Trip successfully deleted",
+    })
+  })
   const { isOpen, onOpen, onClose } = useDisclosure()
   const isOwner = owner === address
 
@@ -29,7 +45,7 @@ export const HomePage = () => {
       <Page.Body>
         <SimpleGrid columns={5} spacing={10}>
           {userTrips.map((userTrip) => {
-            return <MileageCard key={userTrip.tripId} {...userTrip} />
+            return <MileageCard key={userTrip.tripId} {...userTrip} cursor="pointer" />
           })}
         </SimpleGrid>
       </Page.Body>
