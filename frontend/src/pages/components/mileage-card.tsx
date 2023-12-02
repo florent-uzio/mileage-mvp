@@ -1,38 +1,34 @@
-import { Card, CardBody, CardHeader, Heading } from "@chakra-ui/react"
+import { Card, CardBody, CardHeader, Heading, Image } from "@chakra-ui/react"
 import { DetailList } from "../../shared/components"
 
 type MileageCardProps = {
   tripId: bigint
   startLocation: string
   endLocation: string
-  startTime: bigint
-  endTime: bigint
   totalDistance: bigint
-  travelDuration: string
 }
 
 export const MileageCard = ({
   tripId,
   startLocation,
   endLocation,
-  startTime,
-  endTime,
   totalDistance,
-  travelDuration,
 }: MileageCardProps) => {
   return (
     <Card>
       <CardHeader>
+        <Image
+          src="https://media.giphy.com/media/3ohs7K8l2xVqyHwfGE/giphy.gif"
+          alt="car"
+          boxSize={44}
+        />
         <Heading size="md">{`Mileage Report ID: ${tripId}`}</Heading>
       </CardHeader>
       <CardBody>
         <DetailList>
           <DetailList.Pair label="Start Location" value={startLocation} />
           <DetailList.Pair label="End Location" value={endLocation} />
-          <DetailList.Pair label="Start Time" value={startTime.toString()} />
-          <DetailList.Pair label="End Time" value={endTime.toString()} />
-          <DetailList.Pair label="Total Distance" value={totalDistance.toString()} />
-          <DetailList.Pair label="Travel Distance" value={travelDuration} />
+          <DetailList.Pair label="Total Distance (Km)" value={totalDistance.toString()} />
         </DetailList>
       </CardBody>
     </Card>

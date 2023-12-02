@@ -1,4 +1,4 @@
-import { useContractRead } from "wagmi"
+import { useContractEvent, useContractRead } from "wagmi"
 import { Mileage__factory } from "../../contracts"
 import contractDetails from "../../contracts/contract-address.json"
 import { EthereumAddressFormat } from "../models"
@@ -17,5 +17,16 @@ export const useUserTrips = (userAddress: EthereumAddressFormat) => {
     address: contractDetails.address as EthereumAddressFormat,
     functionName: "getAllTripsForUser",
     args: [userAddress],
+  })
+}
+
+export const useTripAllocatedEvent = (action: any) => {
+  return useContractEvent({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    eventName: "TripAllocated",
+    listener(log) {
+      action()
+    },
   })
 }

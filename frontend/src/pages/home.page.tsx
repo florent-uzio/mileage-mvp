@@ -1,6 +1,6 @@
 import { Button, Modal, ModalOverlay, SimpleGrid, useDisclosure } from "@chakra-ui/react"
 import { useAccount } from "wagmi"
-import { useOwner, useUserTrips } from "../shared/apis"
+import { useOwner, useTripAllocatedEvent, useUserTrips } from "../shared/apis"
 import { Page } from "../shared/components"
 import { AllocateModalContent } from "./components/allocate-modal-content"
 import { MileageCard } from "./components/mileage-card"
@@ -8,8 +8,8 @@ import { MileageCard } from "./components/mileage-card"
 export const HomePage = () => {
   const { address = "0x" } = useAccount()
   const { data: owner } = useOwner()
-  const { data: userTrips = [] } = useUserTrips(address)
-
+  const { data: userTrips = [], refetch } = useUserTrips(address)
+  useTripAllocatedEvent(refetch)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const isOwner = owner === address
 

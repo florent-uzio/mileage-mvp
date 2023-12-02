@@ -9,11 +9,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
 } from "@chakra-ui/react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useContractWrite } from "wagmi"
@@ -29,10 +24,7 @@ type AllocateForm = {
   user: `0x${string}`
   startLocation: string
   endLocation: string
-  startTime: bigint
-  endTime: bigint
   totalDistance: bigint
-  travelDuration: string
 }
 
 export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => {
@@ -48,13 +40,10 @@ export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => 
     user,
     startLocation,
     endLocation,
-    startTime,
-    endTime,
     totalDistance,
-    travelDuration,
   }) => {
     allocateTrip({
-      args: [user, startLocation, endLocation, startTime, endTime, totalDistance, travelDuration],
+      args: [user, startLocation, endLocation, totalDistance],
     })
     onClose()
   }
@@ -81,35 +70,8 @@ export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => 
           </FormControl>
 
           <FormControl>
-            <FormLabel>Start time</FormLabel>
-            <NumberInput min={10}>
-              <NumberInputField {...register("startTime")} />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>End time</FormLabel>
-            <NumberInput min={10}>
-              <NumberInputField {...register("endTime")} />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Total distance</FormLabel>
+            <FormLabel>Total distance (Km)</FormLabel>
             <Input {...register("totalDistance")} />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Travel duration (hours)</FormLabel>
-            <Input {...register("travelDuration")} />
           </FormControl>
         </ModalBody>
 

@@ -28,28 +28,19 @@ export declare namespace Mileage {
     tripId: BigNumberish;
     startLocation: string;
     endLocation: string;
-    startTime: BigNumberish;
-    endTime: BigNumberish;
     totalDistance: BigNumberish;
-    travelDuration: string;
   };
 
   export type TripInformationStructOutput = [
     tripId: bigint,
     startLocation: string,
     endLocation: string,
-    startTime: bigint,
-    endTime: bigint,
-    totalDistance: bigint,
-    travelDuration: string
+    totalDistance: bigint
   ] & {
     tripId: bigint;
     startLocation: string;
     endLocation: string;
-    startTime: bigint;
-    endTime: bigint;
     totalDistance: bigint;
-    travelDuration: string;
   };
 }
 
@@ -79,15 +70,7 @@ export interface MileageInterface extends Interface {
 
   encodeFunctionData(
     functionFragment: "allocateTrip",
-    values: [
-      AddressLike,
-      string,
-      string,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      string
-    ]
+    values: [AddressLike, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "deleteAllTrips",
@@ -290,10 +273,7 @@ export interface Mileage extends BaseContract {
       user: AddressLike,
       startLocation: string,
       endLocation: string,
-      startTime: BigNumberish,
-      endTime: BigNumberish,
-      totalDistance: BigNumberish,
-      travelDuration: string
+      totalDistance: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -347,14 +327,11 @@ export interface Mileage extends BaseContract {
   userTrips: TypedContractMethod<
     [arg0: AddressLike, arg1: BigNumberish],
     [
-      [bigint, string, string, bigint, bigint, bigint, string] & {
+      [bigint, string, string, bigint] & {
         tripId: bigint;
         startLocation: string;
         endLocation: string;
-        startTime: bigint;
-        endTime: bigint;
         totalDistance: bigint;
-        travelDuration: string;
       }
     ],
     "view"
@@ -371,10 +348,7 @@ export interface Mileage extends BaseContract {
       user: AddressLike,
       startLocation: string,
       endLocation: string,
-      startTime: BigNumberish,
-      endTime: BigNumberish,
-      totalDistance: BigNumberish,
-      travelDuration: string
+      totalDistance: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -425,14 +399,11 @@ export interface Mileage extends BaseContract {
   ): TypedContractMethod<
     [arg0: AddressLike, arg1: BigNumberish],
     [
-      [bigint, string, string, bigint, bigint, bigint, string] & {
+      [bigint, string, string, bigint] & {
         tripId: bigint;
         startLocation: string;
         endLocation: string;
-        startTime: bigint;
-        endTime: bigint;
         totalDistance: bigint;
-        travelDuration: string;
       }
     ],
     "view"

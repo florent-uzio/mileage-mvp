@@ -11,7 +11,6 @@ export const Header = ({ children }: HeaderProps) => {
     <Box boxShadow="md" bg="bg.surface" position="relative" zIndex="modal">
       <Container maxW="7xl" py="4">
         <HStack justifyContent="space-between">
-          {/* <Heading>Mileage</Heading> */}
           <Logo />
           {children}
           <ConnectButton showBalance />

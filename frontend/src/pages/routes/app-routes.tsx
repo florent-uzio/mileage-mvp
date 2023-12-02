@@ -18,9 +18,6 @@ export const AppRoutes = () => {
           />
         )
       })}
-      {/* <Route path="/" element={<MileagesPage />} /> */}
-
-      {/* <Route path="/" element={<Navigate replace={true} to={ROUTES.} />} /> */}
     </Routes>
   )
 }

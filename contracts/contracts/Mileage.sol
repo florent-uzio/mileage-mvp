@@ -11,10 +11,7 @@ contract Mileage is Ownable {
         uint256 tripId;
         string startLocation;
         string endLocation;
-        uint256 startTime;
-        uint256 endTime;
         uint256 totalDistance;
-        string travelDuration;
     }
 
     // Mapping to associate user addresses with an array of trip information
@@ -50,10 +47,7 @@ contract Mileage is Ownable {
         address user,
         string memory startLocation,
         string memory endLocation,
-        uint256 startTime,
-        uint256 endTime,
-        uint256 totalDistance,
-        string memory travelDuration
+        uint256 totalDistance
     ) external onlyOwner {
         uint256 tripId = tripIdCounter++;
         TripInformation[] storage trips = userTrips[user];
@@ -62,10 +56,7 @@ contract Mileage is Ownable {
                 tripId: tripId,
                 startLocation: startLocation,
                 endLocation: endLocation,
-                startTime: startTime,
-                endTime: endTime,
-                totalDistance: totalDistance,
-                travelDuration: travelDuration
+                totalDistance: totalDistance
             })
         );
 
