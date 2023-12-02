@@ -11,19 +11,19 @@ import {
 import { useAccount } from "wagmi"
 import { useDeleteMileage } from "../../shared/apis"
 import { DetailList } from "../../shared/components"
+import { TripInformation } from "../../shared/models"
 
-type MileageCardProps = {
-  tripId: bigint
-  startLocation: string
-  endLocation: string
-  totalDistance: bigint
-} & CardProps
+type MileageCardProps = TripInformation &
+  CardProps & {
+    openEditModal: (tripInfo: TripInformation) => void
+  }
 
 export const MileageCard = ({
   tripId,
   startLocation,
   endLocation,
   totalDistance,
+  openEditModal,
   ...rest
 }: MileageCardProps) => {
   const { address } = useAccount()
@@ -55,7 +55,11 @@ export const MileageCard = ({
         <Button size="sm" colorScheme="red" onClick={onDeleteHandler}>
           Delete
         </Button>
-        <Button size="sm" colorScheme="blue">
+        <Button
+          size="sm"
+          colorScheme="blue"
+          onClick={() => openEditModal({ tripId, totalDistance, startLocation, endLocation })}
+        >
           Edit
         </Button>
       </CardFooter>

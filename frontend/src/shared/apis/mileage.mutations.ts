@@ -10,3 +10,11 @@ export const useDeleteMileage = () => {
     functionName: "deleteTrip",
   })
 }
+
+export const useUpdateTrip = () => {
+  return useContractWrite({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    functionName: "updateTrip",
+  })
+}

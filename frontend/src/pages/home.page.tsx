@@ -1,13 +1,21 @@
 import { Button, Modal, ModalOverlay, SimpleGrid, useDisclosure, useToast } from "@chakra-ui/react"
+import { useState } from "react"
 import { useAccount } from "wagmi"
-import { useOwner, useTripAllocatedEvent, useTripDeletedEvent, useUserTrips } from "../shared/apis"
+import {
+  useOwner,
+  useTripAllocatedEvent,
+  useTripDeletedEvent,
+  useTripUpdatedEvent,
+  useUserTrips,
+} from "../shared/apis"
 import { Page } from "../shared/components"
-import { AllocateModalContent } from "./components/allocate-modal-content"
-import { MileageCard } from "./components/mileage-card"
+import { TripInformation } from "../shared/models"
+import { AllocateModalContent, EditModalContent, MileageCard } from "./components"
 
 export const HomePage = () => {
   const { address = "0x" } = useAccount()
   const toast = useToast()
+  const [tripInformation, seTripInformation] = useState<TripInformation>()
   const { data: owner } = useOwner()
   const { data: userTrips = [], refetch } = useUserTrips(address)
   useTripAllocatedEvent(() => {
@@ -26,8 +34,23 @@ export const HomePage = () => {
       title: "Trip successfully deleted",
     })
   })
+  useTripUpdatedEvent(() => {
+    refetch()
+    toast({
+      status: "success",
+      isClosable: true,
+      title: "Trip successfully updated",
+    })
+  })
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
   const isOwner = owner === address
+
+  const openEditModal = (tripInfo: TripInformation) => {
+    seTripInformation(tripInfo)
+
+    onEditOpen()
+  }
 
   return (
     <Page>
@@ -45,7 +68,14 @@ export const HomePage = () => {
       <Page.Body>
         <SimpleGrid columns={5} spacing={10}>
           {userTrips.map((userTrip) => {
-            return <MileageCard key={userTrip.tripId} {...userTrip} cursor="pointer" />
+            return (
+              <MileageCard
+                key={userTrip.tripId}
+                {...userTrip}
+                cursor="pointer"
+                openEditModal={openEditModal}
+              />
+            )
           })}
         </SimpleGrid>
       </Page.Body>
@@ -53,6 +83,13 @@ export const HomePage = () => {
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <AllocateModalContent onClose={onClose} />
+      </Modal>
+
+      <Modal isCentered isOpen={isEditOpen && !!tripInformation} onClose={onEditClose}>
+        <ModalOverlay />
+        {tripInformation && (
+          <EditModalContent onClose={onEditClose} tripInfo={tripInformation} address={address} />
+        )}
       </Modal>
     </Page>
   )

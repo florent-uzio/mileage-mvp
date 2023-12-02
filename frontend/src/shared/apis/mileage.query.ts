@@ -41,3 +41,14 @@ export const useTripDeletedEvent = (action: any) => {
     },
   })
 }
+
+export const useTripUpdatedEvent = (action: any) => {
+  return useContractEvent({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    eventName: "TripUpdated",
+    listener() {
+      action()
+    },
+  })
+}

@@ -99,7 +99,7 @@ export interface MileageInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "updateTrip",
-    values: [AddressLike, BigNumberish, string, string]
+    values: [AddressLike, BigNumberish, string, string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "userTrips",
@@ -192,19 +192,22 @@ export namespace TripUpdatedEvent {
     user: AddressLike,
     tripId: BigNumberish,
     startLocation: string,
-    endLocation: string
+    endLocation: string,
+    totalDistance: BigNumberish
   ];
   export type OutputTuple = [
     user: string,
     tripId: bigint,
     startLocation: string,
-    endLocation: string
+    endLocation: string,
+    totalDistance: bigint
   ];
   export interface OutputObject {
     user: string;
     tripId: bigint;
     startLocation: string;
     endLocation: string;
+    totalDistance: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -318,7 +321,8 @@ export interface Mileage extends BaseContract {
       user: AddressLike,
       tripId: BigNumberish,
       startLocation: string,
-      endLocation: string
+      endLocation: string,
+      totalDistance: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -389,7 +393,8 @@ export interface Mileage extends BaseContract {
       user: AddressLike,
       tripId: BigNumberish,
       startLocation: string,
-      endLocation: string
+      endLocation: string,
+      totalDistance: BigNumberish
     ],
     [void],
     "nonpayable"
@@ -479,7 +484,7 @@ export interface Mileage extends BaseContract {
       TripDeletedEvent.OutputObject
     >;
 
-    "TripUpdated(address,uint256,string,string)": TypedContractEvent<
+    "TripUpdated(address,uint256,string,string,uint256)": TypedContractEvent<
       TripUpdatedEvent.InputTuple,
       TripUpdatedEvent.OutputTuple,
       TripUpdatedEvent.OutputObject
