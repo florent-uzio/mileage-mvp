@@ -8,6 +8,7 @@ export const useOwner = () => {
     abi: Mileage__factory.abi,
     address: contractDetails.address as EthereumAddressFormat,
     functionName: "owner",
+    watch: true,
   })
 }
 
@@ -17,6 +18,7 @@ export const useUserTrips = (userAddress: EthereumAddressFormat) => {
     address: contractDetails.address as EthereumAddressFormat,
     functionName: "getAllTripsForUser",
     args: [userAddress],
+    watch: true,
   })
 }
 
@@ -47,6 +49,17 @@ export const useTripUpdatedEvent = (action: any) => {
     address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     eventName: "TripUpdated",
+    listener() {
+      action()
+    },
+  })
+}
+
+export const useOwnershipTransferredEvent = (action: any) => {
+  return useContractEvent({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    eventName: "OwnershipTransferred",
     listener() {
       action()
     },

@@ -18,3 +18,11 @@ export const useUpdateTrip = () => {
     functionName: "updateTrip",
   })
 }
+
+export const useReassignOwner = () => {
+  return useContractWrite({
+    address: contractDetails.address as EthereumAddressFormat,
+    abi: Mileage__factory.abi,
+    functionName: "transferOwnership",
+  })
+}

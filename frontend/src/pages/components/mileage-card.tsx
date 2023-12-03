@@ -16,6 +16,7 @@ import { TripInformation } from "../../shared/models"
 type MileageCardProps = TripInformation &
   CardProps & {
     openEditModal: (tripInfo: TripInformation) => void
+    isOwner: boolean
   }
 
 export const MileageCard = ({
@@ -24,6 +25,7 @@ export const MileageCard = ({
   endLocation,
   totalDistance,
   openEditModal,
+  isOwner,
   ...rest
 }: MileageCardProps) => {
   const { address } = useAccount()
@@ -51,18 +53,23 @@ export const MileageCard = ({
           <DetailList.Pair label="Total Distance (Km)" value={totalDistance.toString()} />
         </DetailList>
       </CardBody>
-      <CardFooter justifyContent="space-around">
-        <Button size="sm" colorScheme="red" onClick={onDeleteHandler}>
-          Delete
-        </Button>
-        <Button
-          size="sm"
-          colorScheme="blue"
-          onClick={() => openEditModal({ tripId, totalDistance, startLocation, endLocation })}
-        >
-          Edit
-        </Button>
-      </CardFooter>
+      {isOwner && (
+        <CardFooter justifyContent="space-around">
+          <>
+            <Button size="sm" colorScheme="red" onClick={onDeleteHandler}>
+              Delete
+            </Button>
+
+            <Button
+              size="sm"
+              colorScheme="blue"
+              onClick={() => openEditModal({ tripId, totalDistance, startLocation, endLocation })}
+            >
+              Edit
+            </Button>
+          </>
+        </CardFooter>
+      )}
     </Card>
   )
 }

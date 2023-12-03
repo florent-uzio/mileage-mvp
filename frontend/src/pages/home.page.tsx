@@ -11,6 +11,7 @@ import { useState } from "react"
 import { useAccount } from "wagmi"
 import {
   useOwner,
+  useOwnershipTransferredEvent,
   useTripAllocatedEvent,
   useTripDeletedEvent,
   useTripUpdatedEvent,
@@ -18,16 +19,20 @@ import {
 } from "../shared/apis"
 import { Page } from "../shared/components"
 import { TripInformation } from "../shared/models"
-import { AllocateModalContent, EditModalContent, MileageCard } from "./components"
+import {
+  AllocateModalContent,
+  EditModalContent,
+  MileageCard,
+  ReassignModalContent,
+} from "./components"
 
 export const HomePage = () => {
   const { address = "0x" } = useAccount()
   const toast = useToast()
   const [tripInformation, seTripInformation] = useState<TripInformation>()
   const { data: owner } = useOwner()
-  const { data: userTrips = [], refetch } = useUserTrips(address)
+  const { data: userTrips = [] } = useUserTrips(address)
   useTripAllocatedEvent(() => {
-    refetch()
     toast({
       status: "success",
       isClosable: true,
@@ -35,7 +40,6 @@ export const HomePage = () => {
     })
   })
   useTripDeletedEvent(() => {
-    refetch()
     toast({
       status: "success",
       isClosable: true,
@@ -43,15 +47,27 @@ export const HomePage = () => {
     })
   })
   useTripUpdatedEvent(() => {
-    refetch()
     toast({
       status: "success",
       isClosable: true,
       title: "Trip successfully updated",
     })
   })
+  useOwnershipTransferredEvent(() => {
+    toast({
+      status: "success",
+      isClosable: true,
+      title: "Ownership transferred successfully",
+    })
+  })
+
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
+  const {
+    isOpen: isReassignOpen,
+    onOpen: onReassignOpen,
+    onClose: onReassignClose,
+  } = useDisclosure()
   const isOwner = owner === address
 
   const openEditModal = (tripInfo: TripInformation) => {
@@ -66,7 +82,7 @@ export const HomePage = () => {
         <Page.Title title="Home" />
         {isOwner && (
           <Page.HeaderActions>
-            <Button variant="outline" colorScheme="blue">
+            <Button variant="outline" colorScheme="blue" onClick={onReassignOpen}>
               Reassign Contract
             </Button>
             <Button colorScheme="blue" onClick={onOpen}>
@@ -81,7 +97,12 @@ export const HomePage = () => {
           <SimpleGrid columns={5} spacing={10}>
             {userTrips.map((userTrip) => {
               return (
-                <MileageCard key={userTrip.tripId} {...userTrip} openEditModal={openEditModal} />
+                <MileageCard
+                  key={userTrip.tripId}
+                  {...userTrip}
+                  openEditModal={openEditModal}
+                  isOwner={isOwner}
+                />
               )
             })}
           </SimpleGrid>
@@ -100,6 +121,11 @@ export const HomePage = () => {
         {tripInformation && (
           <EditModalContent onClose={onEditClose} tripInfo={tripInformation} address={address} />
         )}
+      </Modal>
+
+      <Modal isCentered isOpen={isReassignOpen} onClose={onReassignClose}>
+        <ModalOverlay />
+        <ReassignModalContent onClose={onReassignClose} />
       </Modal>
     </Page>
   )
