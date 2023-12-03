@@ -1,0 +1,23 @@
+import { Route, Routes } from "react-router-dom"
+import { publicRoutes } from "."
+import { AppLayout } from "../../app-layout/app-layouts"
+
+export const AppRoutes = () => {
+  return (
+    <Routes>
+      {publicRoutes.map(({ element: Component, ...rest }) => {
+        return (
+          <Route
+            key={rest.path}
+            {...rest}
+            element={
+              <AppLayout>
+                <Component />
+              </AppLayout>
+            }
+          />
+        )
+      })}
+    </Routes>
+  )
+}

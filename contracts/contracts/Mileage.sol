@@ -11,10 +11,7 @@ contract Mileage is Ownable {
         uint256 tripId;
         string startLocation;
         string endLocation;
-        uint256 startTime;
-        uint256 endTime;
         uint256 totalDistance;
-        string travelDuration;
     }
 
     // Mapping to associate user addresses with an array of trip information
@@ -36,7 +33,8 @@ contract Mileage is Ownable {
         address indexed user,
         uint256 tripId,
         string startLocation,
-        string endLocation
+        string endLocation,
+        uint256 totalDistance
     );
 
     // Event emitted when trip information is retrieved
@@ -50,10 +48,7 @@ contract Mileage is Ownable {
         address user,
         string memory startLocation,
         string memory endLocation,
-        uint256 startTime,
-        uint256 endTime,
-        uint256 totalDistance,
-        string memory travelDuration
+        uint256 totalDistance
     ) external onlyOwner {
         uint256 tripId = tripIdCounter++;
         TripInformation[] storage trips = userTrips[user];
@@ -62,10 +57,7 @@ contract Mileage is Ownable {
                 tripId: tripId,
                 startLocation: startLocation,
                 endLocation: endLocation,
-                startTime: startTime,
-                endTime: endTime,
-                totalDistance: totalDistance,
-                travelDuration: travelDuration
+                totalDistance: totalDistance
             })
         );
 
@@ -77,7 +69,8 @@ contract Mileage is Ownable {
         address user,
         uint256 tripId,
         string memory startLocation,
-        string memory endLocation
+        string memory endLocation,
+        uint256 totalDistance
     ) external onlyOwner {
         TripInformation[] storage trips = userTrips[user];
         uint256 index = findTripIndex(trips, tripId);
@@ -86,8 +79,15 @@ contract Mileage is Ownable {
         TripInformation storage trip = trips[index];
         trip.startLocation = startLocation;
         trip.endLocation = endLocation;
+        trip.totalDistance = totalDistance;
 
-        emit TripUpdated(user, tripId, startLocation, endLocation);
+        emit TripUpdated(
+            user,
+            tripId,
+            startLocation,
+            endLocation,
+            totalDistance
+        );
     }
 
     // Function to delete a specific trip information for a user
@@ -133,5 +133,12 @@ contract Mileage is Ownable {
             }
         }
         return type(uint256).max; // Return a large number if not found
+    }
+
+    // Function to get all trip information for a user
+    function getAllTripsForUser(
+        address user
+    ) external view returns (TripInformation[] memory) {
+        return userTrips[user];
     }
 }
