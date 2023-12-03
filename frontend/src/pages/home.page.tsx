@@ -1,4 +1,12 @@
-import { Button, Modal, ModalOverlay, SimpleGrid, useDisclosure, useToast } from "@chakra-ui/react"
+import {
+  Button,
+  Modal,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react"
 import { useState } from "react"
 import { useAccount } from "wagmi"
 import {
@@ -58,6 +66,9 @@ export const HomePage = () => {
         <Page.Title title="Home" />
         {isOwner && (
           <Page.HeaderActions>
+            <Button variant="outline" colorScheme="blue">
+              Reassign Contract
+            </Button>
             <Button colorScheme="blue" onClick={onOpen}>
               Allocate Mileage
             </Button>
@@ -66,11 +77,17 @@ export const HomePage = () => {
       </Page.Header>
 
       <Page.Body>
-        <SimpleGrid columns={5} spacing={10}>
-          {userTrips.map((userTrip) => {
-            return <MileageCard key={userTrip.tripId} {...userTrip} openEditModal={openEditModal} />
-          })}
-        </SimpleGrid>
+        {userTrips.length ? (
+          <SimpleGrid columns={5} spacing={10}>
+            {userTrips.map((userTrip) => {
+              return (
+                <MileageCard key={userTrip.tripId} {...userTrip} openEditModal={openEditModal} />
+              )
+            })}
+          </SimpleGrid>
+        ) : (
+          <Text>No Mileage Data Found</Text>
+        )}
       </Page.Body>
 
       <Modal isCentered isOpen={isOpen} onClose={onClose}>
