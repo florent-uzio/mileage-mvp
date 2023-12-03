@@ -68,14 +68,7 @@ export const HomePage = () => {
       <Page.Body>
         <SimpleGrid columns={5} spacing={10}>
           {userTrips.map((userTrip) => {
-            return (
-              <MileageCard
-                key={userTrip.tripId}
-                {...userTrip}
-                cursor="pointer"
-                openEditModal={openEditModal}
-              />
-            )
+            return <MileageCard key={userTrip.tripId} {...userTrip} openEditModal={openEditModal} />
           })}
         </SimpleGrid>
       </Page.Body>
