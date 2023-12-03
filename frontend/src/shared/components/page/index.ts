@@ -1,3 +1,3 @@
-export type { BreadCrumb, PageTitleProps } from './atoms'
-export * from './page'
-export * from './page.constants'
+export type { PageTitleProps } from "./atoms"
+export * from "./page"
+export * from "./page.constants"
