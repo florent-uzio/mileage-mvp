@@ -1,66 +1,67 @@
-import { useContractEvent, useContractRead } from "wagmi"
+import { useReadContract, useWatchContractEvent } from "wagmi"
 import { Mileage__factory } from "../../contracts"
 import contractDetails from "../../contracts/contract-address.json"
+import { MILEAGE_ADDRESS } from "../constants"
 import { EthereumAddressFormat } from "../models"
 
 export const useOwner = () => {
-  return useContractRead({
+  return useReadContract({
     abi: Mileage__factory.abi,
     address: contractDetails.address as EthereumAddressFormat,
     functionName: "owner",
-    watch: true,
+    // watch: true,
   })
 }
 
 export const useUserTrips = (userAddress: EthereumAddressFormat) => {
-  return useContractRead({
+  return useReadContract({
     abi: Mileage__factory.abi,
     address: contractDetails.address as EthereumAddressFormat,
     functionName: "getAllTripsForUser",
     args: [userAddress],
-    watch: true,
+    // watch: true,
   })
 }
 
 export const useTripAllocatedEvent = (action: any) => {
-  return useContractEvent({
+  return useWatchContractEvent({
     address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     eventName: "TripAllocated",
-    listener() {
+    onLogs: () => {
       action()
     },
   })
 }
 
 export const useTripDeletedEvent = (action: any) => {
-  return useContractEvent({
+  return useWatchContractEvent({
     address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     eventName: "TripDeleted",
-    listener() {
+    onLogs: () => {
       action()
     },
   })
 }
 
 export const useTripUpdatedEvent = (action: any) => {
-  return useContractEvent({
-    address: contractDetails.address as EthereumAddressFormat,
+  useWatchContractEvent({
+    address: MILEAGE_ADDRESS,
     abi: Mileage__factory.abi,
     eventName: "TripUpdated",
-    listener() {
+    onLogs: () => {
       action()
     },
   })
 }
 
 export const useOwnershipTransferredEvent = (action: any) => {
-  return useContractEvent({
+  return useWatchContractEvent({
     address: contractDetails.address as EthereumAddressFormat,
     abi: Mileage__factory.abi,
     eventName: "OwnershipTransferred",
-    listener() {
+    onLogs: () => {
       action()
     },
   })

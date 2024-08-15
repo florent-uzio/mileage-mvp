@@ -11,7 +11,9 @@ import {
   ModalHeader,
 } from "@chakra-ui/react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useUpdateTrip } from "../../shared/apis"
+import { useWriteContract } from "wagmi"
+import { Mileage__factory } from "../../contracts"
+import { MILEAGE_ADDRESS } from "../../shared/constants"
 import { EthereumAddressFormat, TripInformation } from "../../shared/models"
 
 type EditModalContentProps = {
@@ -29,10 +31,13 @@ export const EditModalContent = ({ address, onClose, tripInfo }: EditModalConten
     },
   })
 
-  const { write: updateTrip } = useUpdateTrip()
+  const { writeContractAsync } = useWriteContract()
 
   const onSubmit: SubmitHandler<EditForm> = ({ startLocation, endLocation, totalDistance }) => {
-    updateTrip({
+    writeContractAsync({
+      abi: Mileage__factory.abi,
+      address: MILEAGE_ADDRESS,
+      functionName: "updateTrip",
       args: [address, tripInfo.tripId, startLocation, endLocation, totalDistance],
     })
     onClose()

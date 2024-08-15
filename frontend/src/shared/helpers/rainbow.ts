@@ -1,51 +1,43 @@
-import { getDefaultWallets } from "@rainbow-me/rainbowkit"
+import { getDefaultConfig } from "@rainbow-me/rainbowkit"
 import "@rainbow-me/rainbowkit/styles.css"
-import { Chain, configureChains, createConfig } from "wagmi"
-import { publicProvider } from "wagmi/providers/public"
+import { createConfig, http } from "@wagmi/core"
+import { type Chain } from "viem"
 
 const xrplEvmRpc = "https://rpc-evm-sidechain.xrpl.org"
 
-const evmSidechain: Chain = {
+export const evmSidechain: Chain = {
   id: 1440002,
   name: "EVM Sidechain",
-  network: "evm-sidechain",
   rpcUrls: {
     default: { http: [xrplEvmRpc] },
     public: { http: [xrplEvmRpc] },
+  },
+  blockExplorers: {
+    default: { name: "EVM Sidechain Explorer", url: "https://explorer.xrplevm.org/" },
   },
   nativeCurrency: {
     decimals: 18,
     name: "xrp",
     symbol: "XRP",
   },
-  //   contracts: {
-  //     multicall3: {
-
-  //     },
-  //   },
   testnet: true,
 }
 
-export const { chains, publicClient } = configureChains(
-  [evmSidechain],
-  [
-    // jsonRpcProvider({
-    //   rpc: () => ({
-    //     http: xrplEvmRpc,
-    //   }),
-    // }),
-    publicProvider(),
-  ],
-)
+export const config = createConfig({
+  chains: [evmSidechain],
+  transports: {
+    [evmSidechain.id]: http(xrplEvmRpc),
+  },
+})
 
-const { connectors } = getDefaultWallets({
+export const wagmiConfig = getDefaultConfig({
   appName: "Mileage App",
   projectId: "Mielage",
-  chains,
+  chains: [evmSidechain],
 })
 
-export const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
-})
+// export const wagmiConfig = createConfig({
+//   autoConnect: true,
+//   connectors,
+//   publicClient,
+// })

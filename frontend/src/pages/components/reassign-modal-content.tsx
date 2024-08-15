@@ -11,7 +11,9 @@ import {
   ModalHeader,
 } from "@chakra-ui/react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useReassignOwner } from "../../shared/apis"
+import { useWriteContract } from "wagmi"
+import { Mileage__factory } from "../../contracts"
+import { MILEAGE_ADDRESS } from "../../shared/constants"
 import { EthereumAddressFormat } from "../../shared/models"
 
 type AllocateModalContentProps = {
@@ -25,10 +27,13 @@ type ReassignForm = {
 export const ReassignModalContent = ({ onClose }: AllocateModalContentProps) => {
   const { register, handleSubmit } = useForm<ReassignForm>()
 
-  const { write: reassignTrip } = useReassignOwner()
+  const { writeContractAsync } = useWriteContract()
 
   const onSubmit: SubmitHandler<ReassignForm> = ({ newUser }) => {
-    reassignTrip({
+    writeContractAsync({
+      abi: Mileage__factory.abi,
+      address: MILEAGE_ADDRESS,
+      functionName: "transferOwnership",
       args: [newUser],
     })
     onClose()
