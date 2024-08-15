@@ -11,7 +11,7 @@ import {
   ModalHeader,
 } from "@chakra-ui/react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { useContractWrite } from "wagmi"
+import { useWriteContract } from "wagmi"
 import { Mileage__factory } from "../../contracts"
 import contractDetails from "../../contracts/contract-address.json"
 import { EthereumAddressFormat } from "../../shared/models"
@@ -30,11 +30,7 @@ type AllocateForm = {
 export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => {
   const { register, handleSubmit } = useForm<AllocateForm>()
 
-  const { write: allocateTrip } = useContractWrite({
-    address: contractDetails.address as EthereumAddressFormat,
-    abi: Mileage__factory.abi,
-    functionName: "allocateTrip",
-  })
+  const { writeContractAsync } = useWriteContract()
 
   const onSubmit: SubmitHandler<AllocateForm> = ({
     user,
@@ -42,7 +38,10 @@ export const AllocateModalContent = ({ onClose }: AllocateModalContentProps) => 
     endLocation,
     totalDistance,
   }) => {
-    allocateTrip({
+    writeContractAsync({
+      address: contractDetails.address as EthereumAddressFormat,
+      abi: Mileage__factory.abi,
+      functionName: "allocateTrip",
       args: [user, startLocation, endLocation, totalDistance],
     })
     onClose()

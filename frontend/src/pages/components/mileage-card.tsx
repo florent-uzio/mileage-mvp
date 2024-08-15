@@ -8,9 +8,10 @@ import {
   Heading,
   Image,
 } from "@chakra-ui/react"
-import { useAccount } from "wagmi"
-import { useDeleteMileage } from "../../shared/apis"
+import { useAccount, useWriteContract } from "wagmi"
+import { Mileage__factory } from "../../contracts"
 import { DetailList } from "../../shared/components"
+import { MILEAGE_ADDRESS } from "../../shared/constants"
 import { TripInformation } from "../../shared/models"
 
 type MileageCardProps = TripInformation &
@@ -29,10 +30,15 @@ export const MileageCard = ({
   ...rest
 }: MileageCardProps) => {
   const { address } = useAccount()
-  const { write: deleteMileage } = useDeleteMileage()
+  const { writeContractAsync } = useWriteContract()
   const onDeleteHandler = () => {
     if (!address) return
-    deleteMileage({ args: [address, tripId] })
+    writeContractAsync({
+      abi: Mileage__factory.abi,
+      address: MILEAGE_ADDRESS,
+      functionName: "deleteTrip",
+      args: [address, tripId],
+    }).then()
   }
 
   return (

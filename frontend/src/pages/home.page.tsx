@@ -1,22 +1,7 @@
-import {
-  Button,
-  Modal,
-  ModalOverlay,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react"
+import { Button, Modal, ModalOverlay, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react"
 import { useState } from "react"
 import { useAccount } from "wagmi"
-import {
-  useOwner,
-  useOwnershipTransferredEvent,
-  useTripAllocatedEvent,
-  useTripDeletedEvent,
-  useTripUpdatedEvent,
-  useUserTrips,
-} from "../shared/apis"
+import { useOwner, useUserTrips } from "../shared/apis"
 import { Page } from "../shared/components"
 import { TripInformation } from "../shared/models"
 import {
@@ -28,38 +13,52 @@ import {
 
 export const HomePage = () => {
   const { address = "0x" } = useAccount()
-  const toast = useToast()
+  // const toast = useToast()
   const [tripInformation, seTripInformation] = useState<TripInformation>()
   const { data: owner } = useOwner()
   const { data: userTrips = [] } = useUserTrips(address)
-  useTripAllocatedEvent(() => {
-    toast({
-      status: "success",
-      isClosable: true,
-      title: "Trip successfully allocated",
-    })
-  })
-  useTripDeletedEvent(() => {
-    toast({
-      status: "success",
-      isClosable: true,
-      title: "Trip successfully deleted",
-    })
-  })
-  useTripUpdatedEvent(() => {
-    toast({
-      status: "success",
-      isClosable: true,
-      title: "Trip successfully updated",
-    })
-  })
-  useOwnershipTransferredEvent(() => {
-    toast({
-      status: "success",
-      isClosable: true,
-      title: "Ownership transferred successfully",
-    })
-  })
+  // useTripAllocatedEvent(() => {
+  //   toast({
+  //     status: "success",
+  //     isClosable: true,
+  //     title: "Trip successfully allocated",
+  //   })
+  // })
+  // useTripDeletedEvent(() => {
+  //   toast({
+  //     status: "success",
+  //     isClosable: true,
+  //     title: "Trip successfully deleted",
+  //   })
+  // })
+  // useWatchContractEvent({
+  //   address: MILEAGE_ADDRESS,
+  //   abi: Mileage__factory.abi,
+  //   eventName: "TripUpdated",
+  //   args: { user: null },
+  //   onLogs: (logs) => {
+  //     console.log(logs)
+  //     console.log("EDITED !")
+  //   },
+  //   onError: (error) => {
+  //     console.log("Error", error)
+  //   },
+  // })
+  // useTripUpdatedEvent(() => {
+  //   console.log("EDITED !")
+  //   toast({
+  //     status: "success",
+  //     isClosable: true,
+  //     title: "Trip successfully updated",
+  //   })
+  // })
+  // useOwnershipTransferredEvent(() => {
+  //   toast({
+  //     status: "success",
+  //     isClosable: true,
+  //     title: "Ownership transferred successfully",
+  //   })
+  // })
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: isEditOpen, onOpen: onEditOpen, onClose: onEditClose } = useDisclosure()
